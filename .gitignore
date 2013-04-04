@@ -1,0 +1,22 @@
+#################
+## Rockets
+#################
+
+
+#################
+## Eclipse
+#################
+
+/bin/*
+.classpath
+.metadata/*
+
+#################
+## Windows
+#################
+
+# Windows image file caches
+Thumbs.db
+
+# Folder config file
+Desktop.ini

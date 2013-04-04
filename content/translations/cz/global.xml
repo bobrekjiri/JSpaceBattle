@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<xliff>
+    <file>
+        <header>
+        </header>
+        <body>
+            <trans-unit>
+                <source>Menu.Exit</source>
+                <target>konec</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Menu.Options</source>
+                <target>nastavení</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Menu.SinglePlayer</source>
+                <target>místní hra</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Menu.HostGame</source>
+                <target>hostovat hru</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Menu.JoinGame</source>
+                <target>připojit se</target>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
