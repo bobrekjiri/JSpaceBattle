@@ -5,17 +5,22 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 import other.Translator;
+import state.ConnectState;
 import state.GameState;
 import state.MenuState;
+import state.OnlineGameState;
 
 public class Game extends StateBasedGame {
 
     public static final int MENU_STATE = 0;
     public static final int GAME_STATE = 1;
+    public static final int ONLINE_GAME_STATE = 2;
+    public static final int CONNECT_STATE = 3;
 
     public static final String VERSION = "0.1";
 
     public static boolean isReinitializationRequried = false;
+    public static boolean isHost = true;
 
     public Game(String title) {
         super(title);
@@ -25,6 +30,8 @@ public class Game extends StateBasedGame {
     @Override
     public void initStatesList(GameContainer container) throws SlickException {
         this.addState(new MenuState(Game.MENU_STATE));
+        // this.addState(new ConnectState(Game.CONNECT_STATE));
+        // this.addState(new OnlineGameState(Game.ONLINE_GAME_STATE));
     }
 
     @Override
@@ -53,6 +60,10 @@ public class Game extends StateBasedGame {
                 return new MenuState(Game.MENU_STATE);
             case Game.GAME_STATE:
                 return new GameState(Game.GAME_STATE);
+            case Game.ONLINE_GAME_STATE:
+                return new OnlineGameState(Game.ONLINE_GAME_STATE);
+            case Game.CONNECT_STATE:
+                return new ConnectState(Game.CONNECT_STATE);
         }
         return null;
     }
