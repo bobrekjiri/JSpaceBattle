@@ -4,39 +4,39 @@ import java.awt.Point;
 import java.awt.Rectangle;
 
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Font;
 import org.newdawn.slick.Graphics;
 
-public class InteractiveLabel {
-    private Color normal, mouseOver, disabled;
-    private Point position;
+public class InteractiveLabel extends Label {
+    private Color mouseOver, disabled;
     private Rectangle rectangle;
-    private String text;
-    private boolean isEnabled, isMouseOver, isColorSet;
+    private boolean isEnabled, isMouseOver;
 
-    public InteractiveLabel(String text, Point position, Rectangle rectangle) {
-        this.text = text;
-        this.position = position;
-        this.rectangle = rectangle;
+    public InteractiveLabel(String text, Point position, Font font, Rectangle rectangle,
+            boolean isShadowed, boolean isCentered) {
+        super(text, position, font, isShadowed);
         isEnabled = true;
-        isColorSet = false;
+        mouseOver = Color.blue;
+        disabled = Color.gray;
+
+        if (isCentered) {
+            position.x -= rectangle.width / 2;
+            position.y -= rectangle.height / 2;
+        }
+        this.rectangle = new Rectangle(position.x, position.y, rectangle.width, rectangle.height);
+
     }
 
-    public void setColors(Color normal, Color mouseOver, Color disabled) {
-        this.normal = normal;
+    public void setColors(Color normal, Color shadow, Color mouseOver, Color disabled) {
+        super.setColors(normal, shadow);
         this.mouseOver = mouseOver;
         this.disabled = disabled;
-        isColorSet = true;
     }
 
     public void render(Graphics g) {
-        if (isColorSet) {
-            g.setColor((!isEnabled) ? disabled : ((isMouseOver) ? mouseOver : normal));
-        }
+        g.setFont(font);
+        g.setColor((!isEnabled) ? disabled : ((isMouseOver) ? mouseOver : normal));
         g.drawString(text, position.x, position.y);
-    }
-
-    public void setText(String text) {
-        this.text = text;
     }
 
     public void setEnabled(boolean value) {
