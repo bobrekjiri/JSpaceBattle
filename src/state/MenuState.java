@@ -1,5 +1,8 @@
 package state;
 
+import java.awt.Point;
+import java.awt.Rectangle;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
@@ -10,6 +13,8 @@ import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import other.InteractiveLabel;
+import other.Label;
 import other.Translator;
 import app.Game;
 import factory.EffectFactory;
@@ -17,9 +22,10 @@ import factory.FontFactory;
 
 public class MenuState extends BasicGameState {
 
-    private int stateId, width, trainTextWidth, trainTextHeight;
-    private Font ubuntuLarge;
-    private String trainText;
+    private int stateId, width, height;
+    private Font ubuntuLarge, ubuntuMedium;
+    private Label titleLabel;
+    private InteractiveLabel[] menu;
 
     public MenuState(int stateId) {
         this.stateId = stateId;
@@ -34,45 +40,71 @@ public class MenuState extends BasicGameState {
         EffectFactory effects = EffectFactory.getInstance();
         ColorEffect whiteEffect = effects.getColorEffect(java.awt.Color.WHITE);
         width = container.getWidth();
+        height = container.getHeight();
 
-        ubuntuLarge = fonts.getFont("ubuntu", width / 16, whiteEffect);
+        ubuntuLarge = fonts.getFont("ubuntu", width / 20, whiteEffect);
+        ubuntuMedium = fonts.getFont("ubuntu", width / 24, whiteEffect);
 
-        trainText = "Space Battle " + Game.VERSION;
-        trainTextWidth = ubuntuLarge.getWidth(trainText);
-        trainTextHeight = ubuntuLarge.getHeight(trainText);
+        String title = "Space Battle " + Game.VERSION;
+        titleLabel = new Label(title, new Point(width / 35, width / 40), ubuntuLarge, true);
+        titleLabel.setColors(Color.white, Color.darkGray);
+
+        String labels[] = { translator.translate("Menu.SinglePlayer"),
+                translator.translate("Menu.HostGame"), translator.translate("Menu.JoinGame"),
+                translator.translate("Menu.Options"), translator.translate("Menu.Exit") };
+
+        menu = new InteractiveLabel[5];
+        for (int i = 0; i < menu.length; i++) {
+            Point position = new Point(width / 2, height * (i + 2) / 8);
+            Rectangle rectangle = new Rectangle(ubuntuMedium.getWidth(labels[i]),
+                    ubuntuMedium.getHeight(labels[i]));
+            menu[i] = new InteractiveLabel(labels[i], position, ubuntuMedium, rectangle, false,
+                    true);
+        }
+        menu[0].setEnabled(false);
     }
 
     @Override
-    public void render(GameContainer container, StateBasedGame game, Graphics g)
+    public void render(final GameContainer container, final StateBasedGame game, final Graphics g)
             throws SlickException {
         g.setFont(ubuntuLarge);
-        g.setColor(Color.gray);
-        drawString(g, ubuntuLarge, trainText, (int) (trainTextWidth / 1.75) + width / 500,
-                (int) (trainTextHeight / 1.5) + width / 750);
-        g.setColor(Color.white);
-        drawString(g, ubuntuLarge, trainText, (int) (trainTextWidth / 1.75),
-                (int) (trainTextHeight / 1.5));
+        titleLabel.render(g);
+        for (InteractiveLabel label : menu) {
+            label.render(g);
+        }
     }
 
     @Override
-    public void update(GameContainer container, StateBasedGame game, int delta)
+    public void update(final GameContainer container, final StateBasedGame game, final int delta)
             throws SlickException {
         Input input = container.getInput();
+        Point mouse = new Point(input.getMouseX(), input.getMouseY());
+
+        for (InteractiveLabel label : menu) {
+            label.setIsMouseOver(mouse);
+        }
 
         if (input.isKeyPressed(Input.KEY_ESCAPE)) {
             container.exit();
         }
+        if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
 
+            if (menu[1].isMouseOver()) {
+                Game.isHost = true;
+                game.enterState(Game.ONLINE_GAME_STATE);
+            }
+            if (menu[2].isMouseOver()) {
+                Game.isHost = false;
+                game.enterState(Game.CONNECT_STATE);
+            }
+            if (menu[4].isMouseOver()) {
+                container.exit();
+            }
+        }
     }
 
     @Override
     public int getID() {
         return this.stateId;
-    }
-
-    private void drawString(Graphics g, Font font, String text, float x, float y) {
-        int width = font.getWidth(text);
-        int height = font.getHeight(text);
-        g.drawString(text, x - width / 2, y - height / 2);
     }
 }
