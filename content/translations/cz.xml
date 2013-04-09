@@ -24,6 +24,18 @@
                 <source>Menu.JoinGame</source>
                 <target>připojit se</target>
             </trans-unit>
+            <trans-unit>
+                <source>Connect.Title</source>
+                <target>Připojování k online hře</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Connect.Info.TabSwitch</source>
+                <target>Pro přepínání mezi textovými poli použijte klávesu TAB</target>
+            </trans-unit>
+            <trans-unit>
+                <source>OnlineGame.HostTitle</source>
+                <target>Hostování online hry</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

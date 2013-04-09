@@ -24,6 +24,18 @@
                 <source>Menu.JoinGame</source>
                 <target>join game</target>
             </trans-unit>
+            <trans-unit>
+                <source>Connect.Title</source>
+                <target>Connecting to online game</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Connect.Info.TabSwitch</source>
+                <target>Use TAB key to switch between text fields</target>
+            </trans-unit>
+            <trans-unit>
+                <source>OnlineGame.HostTitle</source>
+                <target>Hosting online game</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

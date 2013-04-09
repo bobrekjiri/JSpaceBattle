@@ -15,75 +15,54 @@ public class Translator {
 
     private static Translator translator;
     private String languageCode;
-    private Map<String, Map<String, String>> translations;
+    private Map<String, String> translations;
 
     private Translator() {
-        this.languageCode = Configuration.getInstance().get("language");
-        this.init();
+        languageCode = Configuration.getInstance().get("language");
+        init();
     };
 
     private void init() {
-        this.translations = new HashMap<String, Map<String, String>>();
         try {
-            this.loadTranslations("global");
+            loadTranslations();
         } catch (Exception e) {
             e.printStackTrace();
+            System.exit(1);
         }
     }
 
-    private void loadTranslations(String fileName) throws Exception {
-        Map<String, String> translation = new HashMap<String, String>();
-        File file = new File(String.format("content/translations/%s/%s.xml", this.languageCode,
-                fileName));
+    private void loadTranslations() throws Exception {
+        translations = new HashMap<String, String>();
+        File file = new File(String.format("content/translations/%s.xml", this.languageCode));
 
         Document document = XmlHelper.getDocument(file);
-
         NodeList nodes = document.getElementsByTagName("trans-unit");
 
         for (int i = 0; i < nodes.getLength(); i++) {
             Element transUnit = (Element) nodes.item(i);
             String key = transUnit.getElementsByTagName("source").item(0).getTextContent();
             String value = transUnit.getElementsByTagName("target").item(0).getTextContent();
-            translation.put(key, value);
+            translations.put(key, value);
         }
-
-        this.translations.put(fileName, translation);
     }
 
     public static Translator getInstance() {
         if (Translator.translator == null) {
             Translator.translator = new Translator();
         }
-
         return Translator.translator;
     }
 
     public String getLanguageCode() {
-        return this.languageCode;
+        return languageCode;
     }
 
     public void setLanguage(String code) {
-        this.languageCode = code;
-        this.init();
+        languageCode = code;
+        init();
     }
 
     public String translate(String text) {
-        return this.translate(text, "global");
-    }
-
-    public String translate(String text, String fileName) {
-        if (!this.translations.containsKey(fileName)) {
-            try {
-                this.loadTranslations(fileName);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-
-        if (this.translations.get(fileName).containsKey(text)) {
-            return this.translations.get(fileName).get(text);
-        }
-
-        return text;
+        return translations.containsKey(text) ? translations.get(text) : text;
     }
 }
