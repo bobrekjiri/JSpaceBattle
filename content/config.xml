@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <configuration>
     <properties>
-        <property name="fullscreen">true</property>
-        <property name="height">600</property>
-        <property name="width">1024</property>
+        <property name="fullscreen">false</property>
+        <property name="height">900</property>
+        <property name="width">1600</property>
         <property name="language">cz</property>
     <property name="contentPath"/>
     </properties>

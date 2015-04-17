@@ -52,7 +52,7 @@ public class MenuState extends BasicGameState {
                 translator.translate("Menu.DebugAndTest"), translator.translate("Menu.Options"),
                 translator.translate("Menu.Exit") };
 
-        menu = new InteractiveLabel[3];
+        menu = new InteractiveLabel[labels.length];
         for (int i = 0; i < menu.length; i++) {
             Point position = new Point(width / 2, height * (i + 3) / 8);
             menu[i] = new InteractiveLabel(labels[i], position, ubuntuMedium, false, true);
