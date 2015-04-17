@@ -1,6 +1,5 @@
 package state;
 
-import java.awt.Dimension;
 import java.awt.DisplayMode;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
@@ -22,9 +21,9 @@ import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import other.Translator;
 import app.Configuration;
 import app.Game;
+import app.Translator;
 import factory.EffectFactory;
 import factory.FontFactory;
 
@@ -33,13 +32,12 @@ public class OptionsState extends BasicGameState {
     private boolean isMouseOverReturn, isMouseOverSave, isMouseOverResolution,
             isMouseOverFullscreen, isMouseOverLanguage, isFullscreen;
     private int stateId, width, height, languageIndex, modeIndex;
-    private Font ubuntuSmall, ubuntuMedium, ubuntuLarge;
+    private Font ubuntuMedium, ubuntuLarge;
     private Rectangle saveRectangle, returnRectangle, resolutionRectangle, fullscreenRectangle,
             languageRectangle;
     private DisplayMode displayModes[];
-    private Dimension size;
 
-    private String resolutionText, languages[], yes, no, sizeText;
+    private String resolutionText, languages[], yes, no;
     private Translator translator;
     private Configuration configuration;
 
@@ -57,7 +55,6 @@ public class OptionsState extends BasicGameState {
         height = container.getHeight();
 
         ColorEffect whiteEffect = effects.getColorEffect(java.awt.Color.WHITE);
-        ubuntuSmall = fonts.getFont("ubuntu", width / 40, whiteEffect);
         ubuntuMedium = fonts.getFont("ubuntu", width / 20, whiteEffect);
         ubuntuLarge = fonts.getFont("ubuntu", width / 16, whiteEffect);
 
@@ -92,16 +89,13 @@ public class OptionsState extends BasicGameState {
             index++;
         }
 
-        File translations = new File(configuration.get("contentPath") + "translations/");
-        translations.listFiles();
+        File translations = new File("content/translations");
         ArrayList<String> names = new ArrayList<String>();
         index = 0;
         for (File file : translations.listFiles()) {
-            if (file.isDirectory()) {
-                names.add(file.getName());
-                if (translator.getLanguageCode().equals(file.getName())) {
-                    languageIndex = index;
-                }
+            names.add(file.getName().substring(0, 2));
+            if (translator.getLanguageCode().equals(file.getName())) {
+                languageIndex = index;
             }
             index++;
         }
@@ -150,10 +144,6 @@ public class OptionsState extends BasicGameState {
                 height * 3 / 10);
         drawString(g, ubuntuMedium, translator.translate("Language") + ":", width / 6 * 2,
                 height * 4 / 10);
-        drawString(g, ubuntuMedium, translator.translate("Autoscale") + ":", width / 6 * 2,
-                height * 5 / 10);
-        drawString(g, ubuntuMedium, translator.translate("Scale") + ":", width / 6 * 2,
-                height * 6 / 10);
 
         g.setColor((isMouseOverResolution) ? Color.blue : Color.red);
         drawString(g, ubuntuMedium, resolutionText, width / 6 * 4, height * 2 / 10);
@@ -168,10 +158,6 @@ public class OptionsState extends BasicGameState {
         g.setColor((isMouseOverReturn) ? Color.red : Color.white);
         drawString(g, ubuntuMedium, translator.translate("back"), (int) (width / 1.5),
                 (height - returnRectangle.height * 3 / 4));
-        g.setFont(ubuntuSmall);
-        g.setColor((size.width > 7 && size.height > 7 && size.width <= 100 && size.height <= 100) ? Color.white
-                : Color.blue);
-        drawString(g, ubuntuSmall, sizeText, width / 6 * 4, height * 8 / 12);
     }
 
     @Override
@@ -254,16 +240,9 @@ public class OptionsState extends BasicGameState {
             ((AppGameContainer) container).setDisplayMode(displayModes[modeIndex].getWidth(),
                     displayModes[modeIndex].getHeight(), isFullscreen);
 
-            if (!translator.getLanguageCode().equals(languages[languageIndex])) {
-                Game.isReinitializationRequried = true;
-                translate();
-            }
+            translate();
             translator.setLanguage(languages[languageIndex]);
 
-            if (width != displayModes[modeIndex].getWidth()
-                    || height != displayModes[modeIndex].getHeight()) {
-                Game.isReinitializationRequried = true;
-            }
         } catch (SlickException e) {
             e.printStackTrace();
         }
