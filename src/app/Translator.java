@@ -8,10 +8,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-/**
- * Tøída pro správu jazykù a pøekladù ve høe
- * 
- */
 public class Translator {
 
     private static Translator translator;
