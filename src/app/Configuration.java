@@ -83,15 +83,15 @@ public class Configuration {
 
             Element configuration = document.createElement("configuration");
             Element properties = document.createElement("properties");
-            configuration.appendChild(properties);
             for (Entry<String, String> entry : getDefaultProperties().entrySet()) {
                 Element property = document.createElement("property");
                 property.setAttribute("name", entry.getKey());
                 property.setTextContent(entry.getValue());
                 properties.appendChild(property);
-                document.appendChild(configuration);
-                XmlHelper.saveDocument(document, configPath);
             }
+            configuration.appendChild(properties);
+            document.appendChild(configuration);
+            XmlHelper.saveDocument(document, configPath);
             return document;
         }
         return XmlHelper.getDocument(file);
