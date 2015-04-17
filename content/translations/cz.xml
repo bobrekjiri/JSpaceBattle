@@ -36,6 +36,111 @@
                 <source>OnlineGame.HostTitle</source>
                 <target>Hostování online hry</target>
             </trans-unit>
+            <trans-unit>
+                <source>Local.Title</source>
+                <target>Místní hra</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Player</source>
+                <target>Hráč</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Target</source>
+                <target>Cíl</target>
+            </trans-unit>
+            <trans-unit>
+                <source>back</source>
+                <target>zpět</target>
+            </trans-unit>
+            <trans-unit>
+                <source>save</source>
+                <target>uložit</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Resolution</source>
+                <target>Rozlišení</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Language</source>
+                <target>Jazyk</target>
+            </trans-unit>
+            <trans-unit>
+                <source>yes</source>
+                <target>ano</target>
+            </trans-unit>
+            <trans-unit>
+                <source>no</source>
+                <target>ne</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Options</source>
+                <target>nastavení</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Weapon</source>
+                <target>Zbraň</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Engine</source>
+                <target>Motor</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Shield</source>
+                <target>Štít</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Game.Remaining</source>
+                <target>Rakety</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Game.Paused</source>
+                <target>hra pozastavena</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Game.Return</source>
+                <target>[Q] návrat do menu</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Local.Teamplay</source>
+                <target>Týmová hra</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Local.Deathmatch</source>
+                <target>Deathmatch</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Local.Teams</source>
+                <target>Týmy</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Local.Teamplayers</source>
+                <target>Počet spoluhráčů</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Local.Opponents</source>
+                <target>Počet nepřátel</target>
+            </trans-unit>
+            
+            <trans-unit>
+                <source>Game.YouWon</source>
+                <target>Zvítězil jsi!!!</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Game.YourTeamWon</source>
+                <target>Zvítězil tvůj tým!!!</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Game.EnemyWon</source>
+                <target>Prohrál jsi...</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Game.EnemyTeamWon</source>
+                <target>Tvůj tým prohrál...</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Game.Draw</source>
+                <target>Remíza?!?</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

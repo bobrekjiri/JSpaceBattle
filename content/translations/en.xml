@@ -36,6 +36,63 @@
                 <source>OnlineGame.HostTitle</source>
                 <target>Hosting online game</target>
             </trans-unit>
+            <trans-unit>
+                <source>Local.Title</source>
+                <target>Local game</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Game.Remaining</source>
+                <target>Rockets alive</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Game.Paused</source>
+                <target>game paused</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Game.Return</source>
+                <target>[Q] return to menu</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Local.Teamplay</source>
+                <target>Teamplay</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Local.Deathmatch</source>
+                <target>Deathmatch</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Local.Teams</source>
+                <target>Teams</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Local.Teamplayers</source>
+                <target>Teammates</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Local.Opponents</source>
+                <target>Opponents</target>
+            </trans-unit>
+            
+            <trans-unit>
+                <source>Game.YouWon</source>
+                <target>You won!!!</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Game.YourTeamWon</source>
+                <target>Your team won!!!</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Game.EnemyWon</source>
+                <target>You lost...</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Game.EnemyTeamWon</source>
+                <target>Your team lost...</target>
+            </trans-unit>
+            <trans-unit>
+                <source>Game.Draw</source>
+                <target>Draw?!?</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>
