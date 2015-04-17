@@ -1,7 +1,6 @@
 package state;
 
 import java.awt.Point;
-import java.awt.Rectangle;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
@@ -15,8 +14,8 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import other.InteractiveLabel;
 import other.Label;
-import other.Translator;
 import app.Game;
+import app.Translator;
 import factory.EffectFactory;
 import factory.FontFactory;
 
@@ -50,18 +49,14 @@ public class MenuState extends BasicGameState {
         titleLabel.setColors(Color.white, Color.darkGray);
 
         String labels[] = { translator.translate("Menu.SinglePlayer"),
-                translator.translate("Menu.HostGame"), translator.translate("Menu.JoinGame"),
-                translator.translate("Menu.Options"), translator.translate("Menu.Exit") };
+                translator.translate("Menu.DebugAndTest"), translator.translate("Menu.Options"),
+                translator.translate("Menu.Exit") };
 
-        menu = new InteractiveLabel[5];
+        menu = new InteractiveLabel[3];
         for (int i = 0; i < menu.length; i++) {
-            Point position = new Point(width / 2, height * (i + 2) / 8);
-            Rectangle rectangle = new Rectangle(ubuntuMedium.getWidth(labels[i]),
-                    ubuntuMedium.getHeight(labels[i]));
-            menu[i] = new InteractiveLabel(labels[i], position, ubuntuMedium, rectangle, false,
-                    true);
+            Point position = new Point(width / 2, height * (i + 3) / 8);
+            menu[i] = new InteractiveLabel(labels[i], position, ubuntuMedium, false, true);
         }
-        menu[0].setEnabled(false);
     }
 
     @Override
@@ -89,15 +84,18 @@ public class MenuState extends BasicGameState {
         }
         if (input.isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
 
+            if (menu[0].isMouseOver()) {
+                game.enterState(Game.LOCAL_GAME_STATE);
+            }
+
             if (menu[1].isMouseOver()) {
-                Game.isHost = true;
-                game.enterState(Game.ONLINE_GAME_STATE);
+                game.enterState(Game.TEST_DEBUG_STATE);
             }
+
             if (menu[2].isMouseOver()) {
-                Game.isHost = false;
-                game.enterState(Game.CONNECT_STATE);
+                game.enterState(Game.OPTIONS_STATE);
             }
-            if (menu[4].isMouseOver()) {
+            if (menu[3].isMouseOver()) {
                 container.exit();
             }
         }
