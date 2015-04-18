@@ -21,6 +21,8 @@ public final class CommonLineEquation {
     }
 
     public Vector2f commonPoint(CommonLineEquation other) {
+        float y;
+
         // ax+by+c=0
         // dx+ey+f=0
 
@@ -29,14 +31,25 @@ public final class CommonLineEquation {
         // method
         // d * (-a / d) = -a
 
-        float coeficient = -a / other.a;
-        CommonLineEquation other2 = other.multiply(coeficient);
+        // that will work only if d is not 0
 
-        // x's are substracted so we can just leave y on left side and move
-        // everything else to right
-        // y = (-c-f)/(b+e)
+        if (other.a != 0) {
 
-        float y = (-c - other2.c) / (b + other2.b);
+            float coeficient = -a / other.a;
+            CommonLineEquation other2 = other.multiply(coeficient);
+
+            // x's are substracted so we can just leave y on left side and move
+            // everything else to right
+            // y = (-c-f)/(b+e)
+
+            y = (-c - other2.c) / (b + other2.b);
+
+        } else {
+            // otherwise its bit simplier cause
+            // 0x+by+c=0 => y = -c/b
+
+            y = -other.c / other.b;
+        }
 
         // when we have y getting x is simple
         // x = (-by-c)/a
@@ -45,6 +58,7 @@ public final class CommonLineEquation {
 
         // and we are done
         return new Vector2f(x, y);
+
     }
 
     public CommonLineEquation multiply(float multiplier) {
@@ -54,6 +68,6 @@ public final class CommonLineEquation {
     @Override
     public String toString() {
 
-        return String.format("%.2fx+%.2fy+%.2f", a, b, c);
+        return String.format("%.2fx%+.2fy%+.2f", a, b, c);
     }
 }
