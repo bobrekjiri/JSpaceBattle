@@ -1,4 +1,4 @@
-package Math;
+package math;
 
 import org.newdawn.slick.geom.Vector2f;
 
@@ -11,7 +11,7 @@ public final class CommonLineEquation {
     public CommonLineEquation(Vector2f point, Vector2f normalVector) {
         a = normalVector.x;
         b = normalVector.y;
-        c = normalVector.x * point.x + normalVector.y * point.y;
+        c = -normalVector.x * point.x - normalVector.y * point.y;
     }
 
     public CommonLineEquation(float a, float b, float c) {
