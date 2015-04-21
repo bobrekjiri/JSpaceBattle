@@ -6,6 +6,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
+import state.DebugAndTestState;
 import state.GameState;
 import state.LocalGameState;
 import state.MenuState;
@@ -60,7 +61,7 @@ public class Game extends StateBasedGame {
             case Game.GAME_STATE:
                 return new GameState(Game.GAME_STATE);
             case Game.TEST_DEBUG_STATE:
-                return new GameState(Game.TEST_DEBUG_STATE);
+                return new DebugAndTestState(Game.TEST_DEBUG_STATE);
             case Game.LOCAL_GAME_STATE:
                 return new LocalGameState(Game.LOCAL_GAME_STATE);
             case Game.OPTIONS_STATE:

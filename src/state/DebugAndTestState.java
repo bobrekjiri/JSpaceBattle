@@ -3,6 +3,8 @@ package state;
 import java.awt.Point;
 import java.util.ArrayList;
 
+import math.CommonLineEquation;
+
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
@@ -22,6 +24,7 @@ import other.Notification;
 import other.Npc;
 import other.Rocket;
 import app.Game;
+import app.GraphicsHelper;
 import app.Translator;
 import factory.EffectFactory;
 import factory.FontFactory;
@@ -31,11 +34,12 @@ public class DebugAndTestState extends BasicGameState {
     private boolean paused, end;
 
     private Translator translator;
+    private GraphicsHelper gh;
     private int stateId, width, height, teams, teamplayers;
     int[] remaining;
     private Image space, shieldImage, barImage, arrowImage;
     private Image[] rocketImages, bulletImages;
-    private Rocket[] rockets;
+    private Npc[] rockets;
     private Rocket inView;
     private Vector2f centerScreen;
     public ArrayList<Notification> dmgDoneNotifs, dmgTakenNotifs, globalNotifs;
@@ -46,6 +50,8 @@ public class DebugAndTestState extends BasicGameState {
     private Label[] titleLabels, energyLabels;
     private Label playerLabel, targetLabel, pausedLabel, returnLabel, remainingTitleLabel;
 
+    private CommonLineEquation[] viewEquations; // TOP,BOT,LEFT,RIGHT
+
     public DebugAndTestState(int stateId) {
         this.stateId = stateId;
     }
@@ -54,12 +60,15 @@ public class DebugAndTestState extends BasicGameState {
     public void init(final GameContainer container, final StateBasedGame game)
             throws SlickException {
         translator = Translator.getInstance();
+        gh = GraphicsHelper.getInstance();
 
         width = container.getWidth();
         height = container.getHeight();
 
-        teams = Game.teams;
-        teamplayers = Game.teamplayers;
+        // teams = Game.teams;
+        // teamplayers = Game.teamplayers;
+        teams = 0;
+        teamplayers = 2;
         paused = false;
         end = false;
 
@@ -80,28 +89,30 @@ public class DebugAndTestState extends BasicGameState {
         playerLabel = new Label(translator.translate("Player"), new Point(0, 0), ubuntuMedium);
         playerLabel.setColors(Color.blue);
 
-        titleLabels = new Label[6];
-        energyLabels = new Label[6];
+        titleLabels = new Label[8];
+        energyLabels = new Label[8];
 
         for (int i = 0; i < titleLabels.length; i++) {
-            titleLabels[i] = new Label("", new Point(width * (5 * (i / 3)) / 6, width
-                    * ((i % 3) + 1) / 48), ubuntuMedium);
+            titleLabels[i] = new Label("", new Point(width * (5 * (i / 4)) / 6, width
+                    * ((i % 4) + 1) / 48), ubuntuMedium);
             titleLabels[i].setColors(Color.white);
         }
 
         for (int i = 0; i < energyLabels.length; i++) {
-            energyLabels[i] = new Label("", new Point((i < 3) ? width / 11 : width * 89 / 96, width
-                    * ((i % 3) + 1) / 48), ubuntuMedium);
+            energyLabels[i] = new Label("", new Point((i < 4) ? width / 11 : width * 89 / 96, width
+                    * ((i % 4) + 1) / 48), ubuntuMedium);
             energyLabels[i].setColors(Color.white);
         }
 
-        titleLabels[0].setText(translator.translate("Weapon") + ":");
-        titleLabels[1].setText(translator.translate("Engine") + ":");
-        titleLabels[2].setText(translator.translate("Shield") + ":");
+        titleLabels[0].setText(translator.translate("Action") + ":");
+        titleLabels[1].setText(translator.translate("Weapon") + ":");
+        titleLabels[2].setText(translator.translate("Engine") + ":");
+        titleLabels[3].setText(translator.translate("Shield") + ":");
 
-        titleLabels[3].setText(translator.translate("Weapon") + ":");
-        titleLabels[4].setText(translator.translate("Engine") + ":");
-        titleLabels[5].setText(translator.translate("Shield") + ":");
+        titleLabels[4].setText(translator.translate("Action") + ":");
+        titleLabels[5].setText(translator.translate("Weapon") + ":");
+        titleLabels[6].setText(translator.translate("Engine") + ":");
+        titleLabels[7].setText(translator.translate("Shield") + ":");
 
         String tmp = translator.translate("Game.Paused");
         pausedLabel = new Label(tmp, new Point(width / 2 - ubuntuLarge.getWidth(tmp) / 2, height
@@ -140,13 +151,13 @@ public class DebugAndTestState extends BasicGameState {
                 ubuntuMedium, false, true);
         remainingOpponentsLabel.setColors(Color.white);
 
-        rockets = new Rocket[(teams > 0) ? teams * teamplayers : teamplayers];
+        rockets = new Npc[(teams > 0) ? teams * teamplayers : teamplayers];
         for (int i = 0; i < rockets.length; i++) {
             rockets[i] = new Npc(0, 0, (teams > 0) ? i % teams : i, rockets);
         }
 
-        for (int i = 1; i < rockets.length; i++) {
-            Npc npc = (Npc) rockets[i];
+        for (int i = 0; i < rockets.length; i++) {
+            Npc npc = rockets[i];
             npc.setTarget();
         }
 
@@ -157,7 +168,6 @@ public class DebugAndTestState extends BasicGameState {
         globalNotifs = new ArrayList<>();
 
         Notification.setFont(ubuntuMedium);
-        ;
 
         rocketImages = new Image[4];
         rocketImages[0] = new Image("content/graphics/blue.png");
@@ -182,6 +192,12 @@ public class DebugAndTestState extends BasicGameState {
         shieldImage.setCenterOfRotation(28f, 23f);
         barImage.setAlpha(0.25f);
         arrowImage.setCenterOfRotation(12.5f, 10);
+
+        viewEquations = new CommonLineEquation[4];
+        viewEquations[0] = new CommonLineEquation(0, 1, 0);
+        viewEquations[1] = new CommonLineEquation(0, 1, -height);
+        viewEquations[2] = new CommonLineEquation(1, 0, 0);
+        viewEquations[3] = new CommonLineEquation(1, 0, -width);
     }
 
     @Override
@@ -220,23 +236,69 @@ public class DebugAndTestState extends BasicGameState {
                 localBulletImage.drawCentered(bulletBasePosition.x, bulletBasePosition.y);
             }
         }
+
+        Vector2f relativeAdvancedAim = rockets[0].GetAdvancedAim().copy().sub(inView.getPosition())
+                .add(centerScreen);
+        Vector2f relativeMoveCompensationAim = rockets[0].GetMoveCompensationAim().copy()
+                .sub(inView.getPosition()).add(centerScreen);
+
+        Vector2f origin = inView.getPosition().copy().sub(centerScreen);
+        Vector2f relativeTargetPosition = inView.getTarget().getPosition().copy().sub(origin);
+        Vector2f normalTargetDirectionVector = new Vector2f(-inView.getTarget().getDirection().y,
+                inView.getTarget().getDirection().x);
+        CommonLineEquation targetDirectionEquation = new CommonLineEquation(relativeTargetPosition,
+                normalTargetDirectionVector);
+
+        drawLineInView(g, targetDirectionEquation, relativeTargetPosition, inView.getTarget()
+                .getDirection());
+
+        g.setColor(Color.green);
+        g.drawLine(relativeTargetPosition.x, relativeTargetPosition.y, relativeTargetPosition.x
+                + inView.getTarget().getDirection().x * 50, relativeTargetPosition.y
+                + inView.getTarget().getDirection().y * 50);
+
+        CommonLineEquation inViewEquation = new CommonLineEquation(centerScreen, new Vector2f(
+                -inView.getDirection().y, inView.getDirection().x));
+
+        drawLineInView(g, inViewEquation, centerScreen, inView.getDirection());
+
+        g.setColor(Color.blue);
+        g.drawLine(centerScreen.x, centerScreen.y, centerScreen.x + inView.getDirection().x * 50,
+                centerScreen.y + inView.getDirection().y * 50);
+
+        g.setColor(Color.red);
+        g.setLineWidth(2.5f);
+        g.drawOval(relativeAdvancedAim.x - 5, relativeAdvancedAim.y - 5, 10, 10);
+
+        g.setColor(Color.white);
+        g.drawOval(relativeMoveCompensationAim.x - 5, relativeMoveCompensationAim.y - 5, 10, 10);
+
+        g.setColor(Color.white);
+        g.drawString(
+                String.format("%d %d", Math.round(inView.getTarget().getDirection().x),
+                        Math.round(inView.getTarget().getDirection().y)), 0, 500);
+        g.drawString(
+                String.format("%d %d", Math.round(relativeMoveCompensationAim.x),
+                        Math.round(relativeMoveCompensationAim.y)), 0, 525);
+        g.drawString(
+                String.format("%d %d", Math.round(relativeTargetPosition.x),
+                        Math.round(relativeTargetPosition.y)), 0, 550);
+        g.resetLineWidth();
+
+        g.setColor(Color.white);
         if (player.getHP() > 0) {
             playerLabel.render(g);
 
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 4; i++) {
                 titleLabels[i].render(g);
                 energyLabels[i].render(g);
             }
 
             if (player.getTarget() != null) {
                 targetLabel.render(g);
-                for (int i = 3; i < 6; i++) {
+                for (int i = 4; i < 8; i++) {
                     titleLabels[i].render(g);
                     energyLabels[i].render(g);
-                }
-                arrowImage.drawCentered(centerScreen.x, centerScreen.y - 75);
-                if (player.getDistanceToTarget() > 600) {
-                    distanceLabel.render(g);
                 }
             }
             g.setFont(ubuntuMedium);
@@ -271,6 +333,35 @@ public class DebugAndTestState extends BasicGameState {
             endLabel.render(g);
             returnLabel.render(g);
         }
+    }
+
+    private void drawLineInView(Graphics g, CommonLineEquation lineEquation, Vector2f pointOnLine,
+            Vector2f direction) {
+        Vector2f[] commonPoints = new Vector2f[4];
+        for (int i = 0; i < commonPoints.length; i++) {
+            commonPoints[i] = lineEquation.commonPoint(viewEquations[i]);
+        }
+
+        if (testInRange(commonPoints[0].x, 0, width)) {
+            g.setColor((direction.y > 0) ? Color.darkGray : Color.white);
+            gh.drawLine(g, pointOnLine, commonPoints[0]);
+        }
+        if (testInRange(commonPoints[1].x, 0, width)) {
+            g.setColor((direction.y < 0) ? Color.darkGray : Color.white);
+            gh.drawLine(g, pointOnLine, commonPoints[1]);
+        }
+        if (testInRange(commonPoints[2].y, 0, height)) {
+            g.setColor((direction.x > 0) ? Color.darkGray : Color.white);
+            gh.drawLine(g, pointOnLine, commonPoints[2]);
+        }
+        if (testInRange(commonPoints[3].y, 0, height)) {
+            g.setColor((direction.x < 0) ? Color.darkGray : Color.white);
+            gh.drawLine(g, pointOnLine, commonPoints[3]);
+        }
+    }
+
+    private boolean testInRange(float value, float min, float max) {
+        return value > min && value < max;
     }
 
     @Override
@@ -329,7 +420,7 @@ public class DebugAndTestState extends BasicGameState {
 
             }
             for (int i = 0; i < rockets.length; i++) {
-                Npc npc = (Npc) rockets[i];
+                Npc npc = rockets[i];
                 if (npc.getHP() > 0) {
                     npc.update();
                     if (teams > 0) {
@@ -402,15 +493,17 @@ public class DebugAndTestState extends BasicGameState {
                 paused = true;
             }
 
-            energyLabels[0].setText(String.format("%02d",
-                    Math.round(rockets[0].getWeaponEnergy() * 100))
-                    + "%");
+            energyLabels[0].setText(((Npc) inView).getAction());
+
             energyLabels[1].setText(String.format("%02d",
-                    Math.round((rockets[0].getEngineEnergy() < 0.02) ? 0 : rockets[0]
-                            .getEngineEnergy() * 100))
+                    Math.round(inView.getWeaponEnergy() * 100))
                     + "%");
             energyLabels[2].setText(String.format("%02d",
-                    Math.round(rockets[0].getShieldEnergy() * 100))
+                    Math.round((rockets[0].getEngineEnergy() < 0.02) ? 0
+                            : inView.getEngineEnergy() * 100))
+                    + "%");
+            energyLabels[3].setText(String.format("%02d",
+                    Math.round(inView.getShieldEnergy() * 100))
                     + "%");
 
         } else if (paused && !end) {

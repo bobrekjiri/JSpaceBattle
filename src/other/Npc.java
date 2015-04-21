@@ -137,4 +137,15 @@ public class Npc extends Rocket {
         super.update(isBoosterOn, rotateUp);
     }
 
+    public String getAction() {
+        return action.toString();
+    }
+
+    public Vector2f GetAdvancedAim() {
+        return advancedAim;
+    }
+
+    public Vector2f GetMoveCompensationAim() {
+        return moveCompensation(advancedAim);
+    }
 }
